@@ -38,13 +38,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
       currentProduct => {
         this.selectedProduct = {...currentProduct};
       }
-
     );
 
-    this.productService.getProducts().subscribe(
-      (products: Product[]) => this.products = products,
-      (err: any) => this.errorMessage = err.error
-    );
+
+    this.store.dispatch(new productAction.Load());
+    this.store.pipe(select(fromProduct.getProducts)).subscribe(products => {
+      this.products = products;
+    });
+
+    // this.productService.getProducts().subscribe(
+    //   (products: Product[]) => this.products = products,
+    //   (err: any) => this.errorMessage = err.error
+    // );
 
     // this.store.pipe(select('products')).subscribe(products => {
     //   this.displayCode = products.showProductCode;
